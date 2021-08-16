@@ -1,0 +1,26 @@
+header {
+    background-color: #01abd4;
+}
+
+.bg-primary-custom, .btn-custom-primary {
+    background-color: #01abd4 !important;
+    color: white !important;
+}
+
+.btn-custom-primary:hover {
+    opacity: 0.8;
+    transition-duration: 0.3s;
+    box-shadow: #4297ac 0px 0px 10px 0px;
+}
+
+.btn-custom {
+    background: #4297ac !important;
+}
+
+.text-custom {
+    color: #4297ac !important;
+}
+
+.text-custom2 {
+    color: #f2771a !important;
+}

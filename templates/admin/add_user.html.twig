@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin/add_user.js') }}"></script>
+{% endblock %}
+
+{% block title %}Administration - {% endblock %}
+
+{% block body %}
+{% if flash %}
+    <div class="alert alert-{{flash.type}}">{{flash.message|raw}}</div>
+{% endif %}
+
+<div class="container">    
+    <div class="col-md-6 m-auto card px-5 py-3">
+        <div class="text-center">
+            <h2 class="h4 mb-3 text-custom">Ajouter un utilisateur</h2>
+            <p>Si aucun mot de passe n'est renseigné, le mot de passe sera automatiquement créé.</p>
+        </div>
+        {{ form_start(form) }}
+            <div class="form-check form-switch mt-3">
+                {{ form_row(form.roles) }}
+            </div>
+            {{ form_row(form.id) }}
+            {{ form_row(form.username) }}
+            {{ form_row(form.password) }}
+            <div class="row justify-content-between">
+                <div class="col-md-2 text-start">
+                    <a class="btn btn-outline-secondary mb-5" href="/admin">Retour</a>
+                </div>
+                <div class="col-md-10 text-end">
+                    {{ form_row(form.submit) }}
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

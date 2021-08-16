@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration - {% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="text-custom text-center my-5 h2">Espace d'administration</h1>
+    
+    <a class="btn btn-custom-primary float-end mb-5" href="{{ path('admin_add_user') }}">Ajouter un utilisteur</a>
+
+    <table class="table text-center">
+        <thead class="bg-primary-custom">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Identifiant</th>
+                <th scope="col">Admin</th>
+                <th scope="col">Dernière connexion</th>
+                <th scope="col">Modifications</th>
+                <th class="d-sm-print-non d-md-print-table" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>
+                        <span class="text-start">
+                            {% for role in user.roles %}
+                                {% if role == 'ROLE_USER' %}
+                                    <span class="badge bg-info">
+                                {% else %}
+                                    <span class="badge bg-danger">
+                                {% endif %}
+                                    {{ role }}</span>
+                            {% endfor %}
+                        </div>
+                    </td>
+                    <td>{{ user.lastConnexion|date("d-m-Y H:i:s") }}</td>
+                    <td></td>
+                    <td class="d-sm-print-non d-md-print-table">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-scondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                ...
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="{{ path('admin_show_user', {"id" : user.id}) }}">Voir</a></li>
+                                <li><a class="dropdown-item" href="{{ path('admin_edit_user', {"id" : user.id}) }}">Modifier</a></li>
+                                <li><a class="dropdown-item text-danger" href="{{ path('admin_delete_user', {"id" : user.id}) }}">Supprimer</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
