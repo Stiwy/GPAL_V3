@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,12 +22,27 @@ class HomeController extends AbstractController
      */
     public function index(): Response
     {
+        $notification = null;
+        $ref = null;
+
+        if (isset($_GET['notificationType'])) {
+            $notification['type'] = $_GET['notificationType'];
+            $notification['message'] = $_GET['notificationMessage'];
+        }
+
+        if (isset($_GET['ref'])) {
+            $ref = $_GET['ref'];
+        }
+
         $date = new DateTime();
         $user = $this->getUser();
         $user->setLastConnexion($date);
 
         $this->entityManager->flush();
 
-        return $this->render('home/index.html.twig');
+        return $this->render('home/index.html.twig', [
+            'notification' => $notification,
+            'ref' => $ref 
+        ]);
     }
 }

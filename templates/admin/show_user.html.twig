@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration - {% endblock %}
+
+{% block body %}
+<div class="container">
+    {{dump(user)}}
+    <div class="text-center">
+        <div class="row justify-content-between">
+            <div class="col-md-3">
+                <a class="btn btn-outline-secondary mx-2" href="{{ path('admin') }}">Retour</a>
+            </div>
+            <div class="col-md-3">
+                <h2 class="h3 mb-3 text-secondary">Profils de l'utilisateur <strong class="text-custom">{{ user.username }}</strong> </h2>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-outline-primary mx-2" href="{{ path('admin_edit_user', {'id': user.id}) }}">Editer</a>
+                <a class="btn btn-danger mx-2" href="{{ path('admin_delete_user', {'id': user.id}) }}">Supprimer</a>
+            </div>
+        </div>
+
+        <div class="row justify-content-around">
+            <div class="col-md-2 py-4 card shadow text-secondary">
+                <span>Role</span>
+                {% for role in user.roles %}
+                    <b>{{role}}</b>
+                {% endfor %}
+            </div>
+            <div class="col-md-2 py-4 card shadow text-secondary">
+                <span>Dernière connexion</span>
+                <b>Le {{user.lastConnexion|date('d-m-Y à H:i')}}</b>
+            </div>
+            <div class="col-md-2 py-4 card shadowtext-secondary">
+                <span>Modifications</span>
+                <b>5</b>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

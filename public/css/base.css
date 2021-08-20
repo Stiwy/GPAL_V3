@@ -2,6 +2,10 @@ header {
     background-color: #01abd4;
 }
 
+.bg-light-custom {
+    background-color: rgb(223, 223, 223);
+}
+
 .bg-primary-custom, .btn-custom-primary {
     background-color: #01abd4 !important;
     color: white !important;

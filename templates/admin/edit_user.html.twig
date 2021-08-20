@@ -7,20 +7,23 @@
 {% block title %}Administration - {% endblock %}
 
 {% block body %}
-{% if flash %}
-    <div class="alert alert-{{flash.type}}">{{flash.message|raw}}</div>
+{% if notification %}
+    <div class="alert alert-{{notification.type}}">{{notification.message|raw}}</div>
 {% endif %}
 
 <div class="container">    
     <div class="col-md-6 m-auto card px-5 py-3">
         <div class="text-center">
-            <h2 class="h4 mb-3 text-custom">Ajouter un utilisateur</h2>
-            <p>Si aucun mot de passe n'est renseigné, le mot de passe sera automatiquement créé.</p>
+            {% if app.request.requestUri|split('/')[2] == "editer_utilisateur"%}
+                <h2 class="h4 mb-3 text-custom">Modifier un utilisateur</h2>
+                <p>Si aucun mot de passe n'est renseigné, il ne seras pas modifier</p>
+            {% else %}
+                <h2 class="h4 mb-3 text-custom">Ajouter un utilisateur</h2>
+                <p>Si aucun mot de passe n'est renseigné, le mot de passe sera automatiquement créé.</p>
+            {% endif %}
         </div>
         {{ form_start(form) }}
-            <div class="form-check form-switch mt-3">
-                {{ form_row(form.roles) }}
-            </div>
+            {{ form_row(form.roles) }}
             {{ form_row(form.id) }}
             {{ form_row(form.username) }}
             {{ form_row(form.password) }}

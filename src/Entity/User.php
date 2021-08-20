@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -40,6 +42,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $last_connexion;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Palette::class, mappedBy="user")
+     */
+    private $palettes;
+
+    public function __construct()
+    {
+        $this->palettes = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getUsername();
+    }
 
     public function getId(): ?int
     {
@@ -140,6 +157,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastConnexion(?\DateTimeInterface $last_connexion): self
     {
         $this->last_connexion = $last_connexion;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Palette[]
+     */
+    public function getPalettes(): Collection
+    {
+        return $this->palettes;
+    }
+
+    public function addPalette(Palette $palette): self
+    {
+        if (!$this->palettes->contains($palette)) {
+            $this->palettes[] = $palette;
+            $palette->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePalette(Palette $palette): self
+    {
+        if ($this->palettes->removeElement($palette)) {
+            // set the owning side to null (unless already changed)
+            if ($palette->getUser() === $this) {
+                $palette->setUser(null);
+            }
+        }
 
         return $this;
     }

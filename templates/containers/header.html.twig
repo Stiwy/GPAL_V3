@@ -1,0 +1,33 @@
+<header>
+    <div class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand d-none d-md-block text-white">
+                <img src="{{ asset('assets/img/palette.png') }}" alt="Logo GPAL" width="50px">
+                GESTION DES PALETTES
+            </a>
+            {% if app.user %}
+            <form class="d-flex">
+                <input class="form-control" type="search" placeholder="Rechercher..." aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">Chercher</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if app.user %}
+        <nav class="bg-light-custom row">
+            <a href="{{ path('home') }}" class="col-md-3 text-center border border-top-0 border-secondary py-2">
+                <img src="{{ asset('assets/svg/home.svg') }}" alt="Accueil">
+            </a>
+            <a href="" class="col-md-3 text-center border border-top-0 border-secondary py-2">
+                <img src="{{ asset('assets/svg/return.svg') }}" alt="Retour">
+            </a>
+            <a data-bs-toggle="modal" data-bs-target="#addPaletteModal" class="col-md-3 text-center border border-top-0 border-secondary py-2">
+                <img src="{{ asset('assets/svg/plus.svg') }}" alt="Ajouter">
+            </a>
+            <a href="{{ path('app_logout') }}" class="col-md-3 text-center border border-top-0 border-secondary py-2">
+                <img src="{{ asset('assets/svg/logout.svg') }}" alt="Deconnexion">
+            </a>
+        </nav>
+    {% endif %}
+</header>

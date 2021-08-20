@@ -23,11 +23,18 @@ class DashboardController extends AbstractController
      */
     public function index(): Response
     {
+        $notification = null;
+
+        if (isset($_GET['notificationType'])) {
+            $notification['type'] = $_GET['notificationType'];
+            $notification['message'] = $_GET['notificationMessage'];
+        }
 
         $users = $this->entityManager->getRepository(User::class)->findAll();
 
         return $this->render('admin/index.html.twig', [
-            'users' => $users
+            'users' => $users,
+            'notification' => $notification
         ]);
     }
 }
