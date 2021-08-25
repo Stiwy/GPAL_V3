@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Gpal\Src\Classes\ReferencesRegister;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +25,7 @@ class DashboardController extends AbstractController
     public function index(): Response
     {
         $notification = null;
+        $listRefs = ReferencesRegister::findAll($this->entityManager);
 
         if (isset($_GET['notificationType'])) {
             $notification['type'] = $_GET['notificationType'];
@@ -34,7 +36,8 @@ class DashboardController extends AbstractController
 
         return $this->render('admin/index.html.twig', [
             'users' => $users,
-            'notification' => $notification
+            'notification' => $notification,
+            'listRefs' => $listRefss
         ]);
     }
 }

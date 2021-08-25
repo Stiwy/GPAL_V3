@@ -10,11 +10,10 @@
       <div class="modal-body">
         <h2 class="h4 mb-3 text-custom">Ajouter une palette</h2>
         <p>Les palette sont ajouter avec la date du jour de saisie.</p>
-        
         <form action="{{ path('add_palette') }}" methods="post">
           <div class="mb-3">
             <label for="palette_reference" class="form-label required">Référence</label>
-            <input type="text" id="palette_reference" name="palette[reference]" {% if ref %} value='{{ref}}' {% endif %} required="required" aria-describedby="palette_reference_help" class="form-control">       
+            <input type="text" onkeyup="listRef('{{listRefs}}')" id="palette_reference" name="palette[reference]" {% if ref is defined %} value='{{ref}}' {% endif %} required="required" aria-describedby="palette_reference_help" class="form-control">       
             <p id="palette_reference_help" class="form-text mb-0 help-text">Si la référnce n'existe pas, vous devrez l'ajouter.</p>
           </div>
           <div class="row">
@@ -75,6 +74,7 @@
               </div>
           </div>
           <input type="hidden" name="add_palette_link" id="add_palette_link" require readonly>
+          <input type="hidden" name="add_palette_ref" id="add_palette_ref" require readonly>
           <div class="row justify-content-between mt-4">
               <div class="col-md-2 text-start">
                   <a class="btn btn-outline-secondary mb-5" data-bs-dismiss="modal" aria-label="Close">Fermer</a>

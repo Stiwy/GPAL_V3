@@ -44,13 +44,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $last_connexion;
 
     /**
-     * @ORM\OneToMany(targetEntity=Palette::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Logs::class, mappedBy="user")
      */
-    private $palettes;
+    private $logs;
 
     public function __construct()
     {
         $this->palettes = new ArrayCollection();
+        $this->logs = new ArrayCollection();
     }
 
     public function __toString()
@@ -162,29 +163,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Palette[]
+     * @return Collection|Logs[]
      */
-    public function getPalettes(): Collection
+    public function getLogs(): Collection
     {
-        return $this->palettes;
+        return $this->logs;
     }
 
-    public function addPalette(Palette $palette): self
+    public function addLog(Logs $log): self
     {
-        if (!$this->palettes->contains($palette)) {
-            $this->palettes[] = $palette;
-            $palette->setUser($this);
+        if (!$this->logs->contains($log)) {
+            $this->logs[] = $log;
+            $log->setUser($this);
         }
 
         return $this;
     }
 
-    public function removePalette(Palette $palette): self
+    public function removeLog(Logs $log): self
     {
-        if ($this->palettes->removeElement($palette)) {
+        if ($this->logs->removeElement($log)) {
             // set the owning side to null (unless already changed)
-            if ($palette->getUser() === $this) {
-                $palette->setUser(null);
+            if ($log->getUser() === $this) {
+                $log->setUser(null);
             }
         }
 

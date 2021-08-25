@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Form\EditUserType;
 use Doctrine\ORM\EntityManagerInterface;
+use Gpal\Src\Classes\ReferencesRegister;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -82,10 +83,13 @@ class EditUserController extends AbstractController
      */
     public function show($id): Response
     {
+        $listRefs = ReferencesRegister::findAll($this->entityManager);
+
         $user = $this->entityManager->getRepository(User::class)->findOneById($id);
 
         return $this->render('admin/show_user.html.twig', [
-            'user' => $user
+            'user' => $user,
+            'listRefs' => $listRefs
         ]);
     }
 

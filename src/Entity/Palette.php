@@ -2,6 +2,8 @@
 namespace App\Entity;
 
 use App\Repository\PaletteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,11 +24,6 @@ class Palette
     private $reference;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="palettes")
-     */
-    private $user;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $weg;
@@ -41,6 +38,16 @@ class Palette
      */
     private $insertDate;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Logs::class, mappedBy="palette")
+     */
+    private $logs;
+
+    public function __construct()
+    {
+        $this->logs = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -54,18 +61,6 @@ class Palette
     public function setReference(string $reference): self
     {
         $this->reference = $reference;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }
@@ -102,6 +97,36 @@ class Palette
     public function setInsertDate(\DateTimeInterface $insertDate): self
     {
         $this->insertDate = $insertDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Logs[]
+     */
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    public function addLog(Logs $log): self
+    {
+        if (!$this->logs->contains($log)) {
+            $this->logs[] = $log;
+            $log->setPalette($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLog(Logs $log): self
+    {
+        if ($this->logs->removeElement($log)) {
+            // set the owning side to null (unless already changed)
+            if ($log->getPalette() === $this) {
+                $log->setPalette(null);
+            }
+        }
 
         return $this;
     }

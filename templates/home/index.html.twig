@@ -4,5 +4,45 @@
 {% if notification %}
     <div class="alert alert-{{notification.type}}">{{notification.message|raw}}</div>
 {% endif %}
-<h1>Page d'acceuil</h1>
+
+<div>
+    <h1 class="text-center mt-3">Bienvenue à toi {{ app.user.username }}</h1>
+
+    <div class="row justify-content-around mt-5 pt-2">
+        <div class="col-md-3 text-center card bg-light-custom pt-2">
+            <p>
+                <span class="fs-5">Dernière connexion le :</span><br>
+                <strong class="h5">{{ app.user.lastConnexion|date('d-m-Y à H:i') }}</strong>
+            </p>
+        </div>
+        <div class="col-md-3 text-center card bg-light-custom pt-2">
+            <p>
+                <span class="fs-5">Nombre de mouvements :</span><br>
+                <strong class="h5">{{ userLogs|length }}</strong>
+            </p>
+        </div>
+    </div>
+    
+    <table class="mt-5 table text-center">
+        <thead class="bg-primary-custom">
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Action</th>
+                <th scope="col">Information</th>
+                <th class="d-sm-print-non d-md-print-table" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for userLog in userLogs %}
+                <tr>
+                    <td>{{ userLog.dateInsert|date('H:i:s d-m-Y') }}</td>
+                    <td>{{ userLog.action }}</td>
+                    <td>{{ userLog.info }}</td>
+                    <td><a href="" class="btn btn-sm btn-warning">Voir <span class="d-sm-print-non d-md-print-table">la palette</span></a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 {% endblock %}
