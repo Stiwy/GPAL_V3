@@ -28,3 +28,8 @@ header {
 .text-custom2 {
     color: #f2771a !important;
 }
+
+.btn-delete-palette {
+    position: fixed;
+    bottom: 0;
+}

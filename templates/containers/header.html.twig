@@ -6,8 +6,8 @@
                 GESTION DES PALETTES
             </a>
             {% if app.user %}
-            <form class="d-flex">
-                <input class="form-control" type="search" placeholder="Rechercher..." aria-label="Search">
+            <form class="d-flex" methods="GET" action="{{ path('search') }}">
+                <input class="form-control" name="search" type="search" placeholder="Rechercher..." aria-label="Search">
                 <button class="btn btn-outline-light" type="submit">Chercher</button>
             </form>
             {% endif %}

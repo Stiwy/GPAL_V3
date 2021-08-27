@@ -2,54 +2,47 @@
 
 namespace App\Controller;
 
-use App\Entity\Logs;
-use DateTime;
+use App\Entity\Palette;
 use Doctrine\ORM\EntityManagerInterface;
 use Gpal\Src\Classes\ReferencesRegister;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class SearchController extends AbstractController
 {
     private $entityManager;
-    
+
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
     
     /**
-     * @Route("/intranet/acceuil", name="home")
+     * @Route("/rechercher", name="search")
      */
     public function index(): Response
     {
         $notification = null;
-        $ref = null;
         $listRefs = ReferencesRegister::findAll($this->entityManager);
-
-        $userLogs = $this->entityManager->getRepository(Logs::class)->findByUser($this->getUser());
+        $searchRef = "";
+        $palettes = "";
 
         if (isset($_GET['notificationType'])) {
             $notification['type'] = $_GET['notificationType'];
             $notification['message'] = $_GET['notificationMessage'];
         }
 
-        if (isset($_GET['ref'])) {
-            $ref = $_GET['ref'];
+        if (!empty($_GET['search'])) {
+            $searchRef = htmlspecialchars($_GET['search']);
+            $palettes = $this->entityManager->getRepository(Palette::class)->findByRef($searchRef);
         }
 
-        $date = new DateTime();
-        $user = $this->getUser();
-        $user->setLastConnexion($date);
-
-        $this->entityManager->flush();
-
-        return $this->render('home/index.html.twig', [
-            'notification' => $notification,
-            'ref' => $ref,
-            'userLogs' => array_reverse($userLogs),
+        return $this->render('search/index.html.twig', [
+            'palettes' => $palettes,
             'listRefs' => $listRefs,
+            'searchRef' => $searchRef,
+            'notification' => $notification
         ]);
     }
 }

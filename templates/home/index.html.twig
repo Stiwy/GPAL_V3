@@ -38,7 +38,7 @@
                     <td>{{ userLog.dateInsert|date('H:i:s d-m-Y') }}</td>
                     <td>{{ userLog.action }}</td>
                     <td>{{ userLog.info }}</td>
-                    <td><a href="" class="btn btn-sm btn-warning">Voir <span class="d-sm-print-non d-md-print-table">la palette</span></a></td>
+                    <td>{% if userLog.palette.id is defined %}<a href="{{ path('show_palette', {'id':  userLog.palette.id}) }}" class="btn btn-sm btn-warning">Voir <span class="d-sm-print-non d-md-print-table">la palette</span></a>{% endif %}</td>
                 </tr>
             {% endfor %}
         </tbody>

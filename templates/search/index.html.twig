@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{% if notification %}
+    <div class="alert alert-{{notification.type}}">{{notification.message|raw}}</div>
+{% endif %}
+
+<div>
+    <h1 class="text-center mt-3">{{palettes|length }} Résultat(s) trouvés pour votre recherche "{{ searchRef }}"</h1>
+
+    <table class="mt-5 table text-center">
+        <thead class="bg-primary-custom">
+            <tr>
+                <th scope="col">Entreprise</th>
+                <th scope="col">Référence</th>
+                <th scope="col">Emplacement</th>
+                <th scope="col">Date d'arrivage</th>
+                <th class="d-sm-print-non d-md-print-table" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for palette in palettes %}
+                <tr>
+                    <td><span class="badge {% if palette.getCompany() == 'Robé Médical' %} bg-primary {% else %} bg-success {% endif %}">{{ palette.getCompany() }}</span></td>
+                    <td>{{ palette.getReference() }}</td>
+                    <td>A{{ palette.getWeg() }} | R{{ palette.getShelf() }}</td>
+                    <td>{{ palette.getInsertDate()|date('d-m-Y') }}</td>
+                    <td><a href="{{ path('show_palette', {'id': palette.getID()}) }}" class="btn btn-sm btn-warning">Voir <span class="d-sm-print-non d-md-print-table">la palette</span></a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

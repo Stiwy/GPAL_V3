@@ -39,6 +39,11 @@ class Palette
     private $insertDate;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $company;
+
+    /**
      * @ORM\OneToMany(targetEntity=Logs::class, mappedBy="palette")
      */
     private $logs;
@@ -97,6 +102,18 @@ class Palette
     public function setInsertDate(\DateTimeInterface $insertDate): self
     {
         $this->insertDate = $insertDate;
+
+        return $this;
+    }
+
+    public function getCompany(): ?string
+    {
+        return $this->company;
+    }
+
+    public function setCompany(string $company): self
+    {
+        $this->company = $company;
 
         return $this;
     }

@@ -20,11 +20,13 @@ class Palette
 
             $date = new DateTime();
             $data = $request->get('palette');
+            $company = empty($data['company']) ? "Robé Médical" : $data['company'];
 
             $palette->setReference(htmlspecialchars($data['reference']));
             $palette->setWeg((int) $data['weg']);
             $palette->setShelf((int) $data['shelf']);
             $palette->setInsertDate($date);
+            $palette->setCompany($company);
 
              if (empty($palette->getReference())) {
                 $notificationType = 'danger';

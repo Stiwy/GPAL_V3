@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LogsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,12 +26,6 @@ class Logs
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Palette::class, inversedBy="logs")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $palette;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $action;
@@ -44,6 +40,16 @@ class Logs
      */
     private $date_insert;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Palette::class, inversedBy="logs")
+     */
+    private $palette;
+
+    public function __construct()
+    {
+        $this->palettes = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -57,18 +63,6 @@ class Logs
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getPalette(): ?Palette
-    {
-        return $this->palette;
-    }
-
-    public function setPalette(?Palette $palette): self
-    {
-        $this->palette = $palette;
 
         return $this;
     }
@@ -105,6 +99,18 @@ class Logs
     public function setDateInsert(\DateTimeInterface $date_insert): self
     {
         $this->date_insert = $date_insert;
+
+        return $this;
+    }
+
+    public function getPalette(): ?Palette
+    {
+        return $this->palette;
+    }
+
+    public function setPalette(?Palette $palette): self
+    {
+        $this->palette = $palette;
 
         return $this;
     }
