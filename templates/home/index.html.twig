@@ -6,16 +6,16 @@
 {% endif %}
 
 <div>
-    <h1 class="text-center mt-3">Bienvenue à toi {{ app.user.username }}</h1>
+    <h1 class="text-center mt-3 text-secondary">Bienvenue à toi <span class="text-custom">{{ app.user.username }}</span></h1>
 
     <div class="row justify-content-around mt-5 pt-2">
-        <div class="col-md-3 text-center card bg-light-custom pt-2">
+        <div class="col-6 col-md-4 text-center card bg-light-custom pt-2">
             <p>
                 <span class="fs-5">Dernière connexion le :</span><br>
                 <strong class="h5">{{ app.user.lastConnexion|date('d-m-Y à H:i') }}</strong>
             </p>
         </div>
-        <div class="col-md-3 text-center card bg-light-custom pt-2">
+        <div class="col-6 col-md-4 text-center card bg-light-custom pt-2">
             <p>
                 <span class="fs-5">Nombre de mouvements :</span><br>
                 <strong class="h5">{{ userLogs|length }}</strong>
@@ -34,11 +34,11 @@
         </thead>
         <tbody>
             {% for userLog in userLogs %}
-                <tr>
+                <tr {% if userLog.palette.id is defined %} onclick="document.location.href = '{{ path('show_palette', {'id':  userLog.palette.id}) }}'" {% endif %}>
                     <td>{{ userLog.dateInsert|date('H:i:s d-m-Y') }}</td>
                     <td>{{ userLog.action }}</td>
                     <td>{{ userLog.info }}</td>
-                    <td>{% if userLog.palette.id is defined %}<a href="{{ path('show_palette', {'id':  userLog.palette.id}) }}" class="btn btn-sm btn-warning">Voir <span class="d-sm-print-non d-md-print-table">la palette</span></a>{% endif %}</td>
+                    <td class="d-none d-md-inline">{% if userLog.palette.id is defined %}<a href="{{ path('show_palette', {'id':  userLog.palette.id}) }}" class="btn btn-sm btn-warning">Voir <span>la palette</span></a>{% endif %}</td>
                 </tr>
             {% endfor %}
         </tbody>

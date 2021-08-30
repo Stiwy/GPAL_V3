@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Classes\Search;
 use App\Entity\Logs;
 use App\Entity\Palette;
 use Symfony\Component\HttpFoundation\Request;

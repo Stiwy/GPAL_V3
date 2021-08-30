@@ -37,7 +37,7 @@ class DashboardController extends AbstractController
         return $this->render('admin/index.html.twig', [
             'users' => $users,
             'notification' => $notification,
-            'listRefs' => $listRefss
+            'listRefs' => $listRefs
         ]);
     }
 }

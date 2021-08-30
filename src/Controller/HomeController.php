@@ -24,11 +24,19 @@ class HomeController extends AbstractController
      */
     public function index(): Response
     {
+        if ($this->getUser()->getRoles()[0] == 'ROLE_ADMIN') {
+            return $this->redirectToRoute('admin');
+        }
+
         $notification = null;
         $ref = null;
         $listRefs = ReferencesRegister::findAll($this->entityManager);
 
-        $userLogs = $this->entityManager->getRepository(Logs::class)->findByUser($this->getUser());
+        $date = new DateTime('now'); 
+        $date -> modify('-2 day');
+        $date -> format('Y-m-d');
+
+        $userLogs = $this->entityManager->getRepository(Logs::class)->findLogsUserByDate($this->getUser(), $date);
 
         if (isset($_GET['notificationType'])) {
             $notification['type'] = $_GET['notificationType'];

@@ -3,14 +3,13 @@
 {% block title %}Administration - {% endblock %}
 
 {% block body %}
-<div class="container">
-    {{dump(user)}}
+<div class="container mt-5">
     <div class="text-center">
         <div class="row justify-content-between">
-            <div class="col-md-3">
+            <div class="col-3">
                 <a class="btn btn-outline-secondary mx-2" href="{{ path('admin') }}">Retour</a>
             </div>
-            <div class="col-md-3">
+            <div class="col-9 col-md-3">
                 <h2 class="h3 mb-3 text-secondary">Profils de l'utilisateur <strong class="text-custom">{{ user.username }}</strong> </h2>
             </div>
             <div class="col-md-3">
@@ -31,10 +30,33 @@
                 <b>Le {{user.lastConnexion|date('d-m-Y à H:i')}}</b>
             </div>
             <div class="col-md-2 py-4 card shadowtext-secondary">
-                <span>Modifications</span>
-                <b>5</b>
+                <span>Modifications <small>/48h</small></span>
+                <b>{{ userLogs|length }}</b>
             </div>
         </div>
+    </div>
+
+    <div>
+        <table class="mt-5 table text-center">
+            <thead class="bg-primary-custom">
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Action</th>
+                    <th scope="col">Information</th>
+                    <th class="d-sm-print-non d-md-print-table" scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                    <tr {% if log.palette.id is defined %} onclick="document.location.href = '{{ path('show_palette', {'id':  log.palette.id}) }}'" {% endif %}>
+                        <td>{{ log.dateInsert|date('H:i:s d-m-Y') }}</td>
+                        <td>{{ log.action }}</td>
+                        <td>{{ log.info }}</td>
+                        <td class="d-none d-md-inline">{% if log.palette.id is defined %}<a href="{{ path('show_palette', {'id':  log.palette.id}) }}" class="btn btn-sm btn-warning">Voir <span class="d-sm-print-non d-md-print-table">la palette</span></a>{% endif %}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
 </div>

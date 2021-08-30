@@ -9,28 +9,28 @@
 
     <div class="container">   
 
-        <div class="card mt-5 shadow">
+        <div class="card mt-5 shadow pb-2">
             <div class='row align-items-center'>
-                <div class="col-md-6 text-center">
+                <div class="col-md-6 text-center d-none d-md-block">
                     <img src="{{ asset('assets/img/palette.png') }}" alt="Image de palette" width="320px">
                 </div>
-                <div class="col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="row">
-                        <div class="col-md-6 text-center">
+                        <div class="col-6 text-center">
                             <span class="fs-4">Référence</span> <br>
                             <b class="h4">{{ palette.getReference() }}</b>
                         </div>
-                        <div class="col-md-6 text-center">
+                        <div class="col-6 text-center">
                             <span class="fs-4">Entrprise</span> <br>
                             <b class="h5 text-white border-rounted p-1 {% if palette.getCompany() == 'Robé Médical' %} bg-primary {% else %} bg-success {% endif %}">{{ palette.getCompany() }}</b>
                         </div>
                     </div>
                     <div class="row mt-5">
-                        <div class="col-md-6 text-center">
+                        <div class="col-6 text-center">
                             <span class="fs-4">Date d'arrivage</span> <br>
                             <b class="h4">{{ palette.getInsertDate()|date('d-m-Y') }}</b>
                         </div>
-                        <div class="col-md-6 text-center">
+                        <div class="col-6 text-center">
                             <span class="fs-4">Emplacement</span> <br>
                             <b class="h4">A{{ palette.getWeg() }} | R{{palette.getShelf()}}</b>
                         </div>
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <div class="card mt-5 shadow">
+        <div class="card mt-5 shadow mb-5">
             <h3 class="text-center">Historique le la palette</h3>
             <table class="mt-1 table text-center">
                 <thead class="bg-primary-custom">

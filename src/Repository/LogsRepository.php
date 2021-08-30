@@ -19,22 +19,20 @@ class LogsRepository extends ServiceEntityRepository
         parent::__construct($registry, Logs::class);
     }
 
-    // /**
-    //  * @return Logs[] Returns an array of Logs objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+ * @return Logs[] Returns an array of Logs objects
+    */ 
+    public function findLogsUserByDate($user, $date)
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
+            ->where('l.user = :user')
+            ->andWhere('l.date_insert > :date_insert')
+            ->setParameter('user', $user)
+            ->setParameter('date_insert', $date)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Logs

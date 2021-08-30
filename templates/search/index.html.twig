@@ -6,7 +6,7 @@
 {% endif %}
 
 <div>
-    <h1 class="text-center mt-3">{{palettes|length }} Résultat(s) trouvés pour votre recherche "{{ searchRef }}"</h1>
+    <h1 class="text-center mt-3 text-secondary"><span class="text-custom">{{palettes|length }} Résultat(s)</span> trouvés pour votre recherche "<span class="text-custom">{{ searchRef }}</span>"</h1>
 
     <table class="mt-5 table text-center">
         <thead class="bg-primary-custom">
@@ -20,12 +20,12 @@
         </thead>
         <tbody>
             {% for palette in palettes %}
-                <tr>
+                <tr onclick="document.location.href = '{{ path('show_palette', {'id':  palette.getID()}) }}'">
                     <td><span class="badge {% if palette.getCompany() == 'Robé Médical' %} bg-primary {% else %} bg-success {% endif %}">{{ palette.getCompany() }}</span></td>
                     <td>{{ palette.getReference() }}</td>
                     <td>A{{ palette.getWeg() }} | R{{ palette.getShelf() }}</td>
                     <td>{{ palette.getInsertDate()|date('d-m-Y') }}</td>
-                    <td><a href="{{ path('show_palette', {'id': palette.getID()}) }}" class="btn btn-sm btn-warning">Voir <span class="d-sm-print-non d-md-print-table">la palette</span></a></td>
+                    <td class="d-none d-md-inline"><a href="{{ path('show_palette', {'id': palette.getID()}) }}" class="btn btn-sm btn-warning">Voir la palette</a></td>
                 </tr>
             {% endfor %}
         </tbody>

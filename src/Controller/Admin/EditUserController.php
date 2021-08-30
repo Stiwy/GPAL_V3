@@ -2,10 +2,13 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Logs;
 use App\Entity\User;
 use App\Form\EditUserType;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Gpal\Src\Classes\ReferencesRegister;
+use Gpal\Src\Classes\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +30,7 @@ class EditUserController extends AbstractController
      */
     public function create(Request $request, UserPasswordHasherInterface $hasher): Response
     {
+        $listRefs = ReferencesRegister::findAll($this->entityManager);
 
         $notification = null;
         $user = new User();
@@ -36,45 +40,14 @@ class EditUserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $repo = $this->entityManager->getRepository(User::class);
-
-            if (!empty($user->getId()) && !is_integer($user->getId())) {
-                $notification['type'] = 'danger';
-                $notification['message'] = "<strong>Erreur ! </strong> L'identifiant doit êtres un nombre." ;
-            } elseif (!empty($user->getId()) && $repo->findOneById($user->getId())) {
-                $notification['type'] = 'danger';
-                $notification['message'] = "<strong>Erreur ! </strong> L'identifiant doit êtres unique." ;
-            }
-
-            if ($repo->findOneByUsername($user->getUsername())) {
-                $notification['type'] = 'danger';
-                $notification['message'] = "<strong>Erreur ! </strong> Le nom d'utilisateur doit êtres unique." ;
-            }
-
-            if (!$form->get('password')->getData()) {
-                $passwordClear = $user->getUsername() . rand(10, 99);
-            } else {
-                $passwordClear = $form->get('password')->getData();
-            }
-
-            if ($form->isValid() && is_null($notification)) {
-                $password = $hasher->hashPassword($user, $passwordClear);
-                $user->setPassword($password);
-
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
-
-                $notificationType = 'success';
-                $notificationMessage = "<strong>Succès ! </strong> L'utilisateur à bien été créé avec l'identifiant <strong>" . $user->getUsername() . "</strong> et le mot de passe <strong>" . $passwordClear . "</strong>." ;
-
-                return $this->redirectToRoute('admin', ['notificationType' => $notificationType, 'notificationMessage' => $notificationMessage]);
-            }
+            return $this->redirectToRoute('admin', Users::create($this->entityManager, $form, $user, $hasher, $notification));
             
         }
 
         return $this->render('admin/edit_user.html.twig', [
             'form' => $form->createView(),
-            'notification' => $notification
+            'notification' => $notification,
+            'listRefs' => $listRefs
         ]);
     }
 
@@ -85,11 +58,19 @@ class EditUserController extends AbstractController
     {
         $listRefs = ReferencesRegister::findAll($this->entityManager);
 
+        $date = new DateTime('now'); 
+        $date -> modify('-2 day');
+        $date -> format('Y-m-d');
+
         $user = $this->entityManager->getRepository(User::class)->findOneById($id);
+        $logs = $this->entityManager->getRepository(Logs::class)->findByUser($user);
+        $userLogs = $this->entityManager->getRepository(Logs::class)->findLogsUserByDate($user, $date);
 
         return $this->render('admin/show_user.html.twig', [
             'user' => $user,
-            'listRefs' => $listRefs
+            'listRefs' => $listRefs,
+            'logs' => array_reverse($logs),
+            'userLogs' => $userLogs
         ]);
     }
 
@@ -98,6 +79,7 @@ class EditUserController extends AbstractController
      */
     public function edit($id, Request $request, UserPasswordHasherInterface $hasher): Response
     {
+        $listRefs = ReferencesRegister::findAll($this->entityManager);
         
         $notification = null;
         $user = $this->entityManager->getRepository(User::class)->findOneById($id);
@@ -107,33 +89,14 @@ class EditUserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid() ) {
             
-            $thisUser = $this->entityManager->getRepository(User::class)->findOneById($id);
-            $repo = $this->entityManager->getRepository(User::class);
-
-            if ($repo->findOneByUsername($user->getUsername()) && $thisUser->getUsername() != $user->getUsername()) {
-                $notification['type'] = 'danger';
-                $notification['message'] = "<strong>Erreur ! </strong> Le nom d'utilisateur doit êtres unique." ;
-            }
-
-            if ($form->get('password')->getData()) {
-                $password = $hasher->hashPassword($user, $form->get('password')->getData());  
-                $user->setPassword($password);
-            }
-
-            if (is_null($notification)) {
-                $this->entityManager->flush();
-
-                $notificationType = 'success';
-                $notificationMessage = "<strong>Succès ! </strong> L'utilisateur <strong>" . $user->getUsername() . "</strong> à bien été mis à jour !" ;
-
-                return $this->redirectToRoute('admin', ['notificationType' => $notificationType, 'notificationMessage' => $notificationMessage]);
-            }
+            return $this->redirectToRoute('admin', Users::edit($this->entityManager, $form, $user, $id, $hasher, $notification));
             
         }
 
         return $this->render('admin/edit_user.html.twig', [
             'form' => $form->createView(),
-            'notification' => $notification
+            'notification' => $notification,
+            'listRefs' => $listRefs
         ]);
     }
 
